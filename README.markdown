@@ -15,7 +15,7 @@ A PHP class to wrap the Unix/Linux at/atd job queue. At allows you to specify a 
 	
 	// create a file job
 	$job = '/home/example/example.sh';
-	// save file job to queue letter c
+	// save file job to queue letter f
 	$queue = 'f';
 	At::file($job, $time, $queue);
 	
