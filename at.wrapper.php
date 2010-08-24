@@ -1,0 +1,319 @@
+<?php
+namespace Treffynnon\At;
+/**
+ * The class that wraps the at binary. It is not feature complete as the
+ * native at binary does offer more, but it does contain the commonly used
+ * functions and is enough for my purposes.
+ *
+ * @author Simon Holywell
+ * @version 24.08.2010
+ */
+class Wrapper {
+    /**
+     * The path to the `at` binary.
+     * @var string
+     */
+    private static $binary = 'at';
+    
+    /**
+     * Regular expression to get the details of a job from the add job response
+     * @var string
+     */
+    private static $addRegex = '/^job (\d+) at \w+ (\w+) (\d\d?) (\d\d):(\d\d):(\d\d) (\d{4})$/';
+
+    /**
+     * A map of the regex matches to thier descriptive names
+     * @var array
+     */
+    private static $addMap = array(
+        1 => 'job_number',
+        2 => 'month',
+        3 => 'day',
+        4 => 'hour',
+        5 => 'minute',
+        6 => 'second',
+        7 => 'year',
+    );
+
+    /**
+     * Regex to get the vitals from the queue
+     * @var string
+     */
+    private static $queueRegex = '/^(\d+)\s+\w+ (\w+) (\d\d?) (\d\d):(\d\d):(\d\d) (\d{4}) (\w) (\w+)$/';
+
+    /**
+     * A map of the regex matches to thier descriptive names
+     * @var array
+     */
+    private static $queueMap = array(
+        1 => 'job_number',
+        2 => 'month',
+        3 => 'day',
+        4 => 'hour',
+        5 => 'minute',
+        6 => 'second',
+        7 => 'year',
+        8 => 'queue',
+        9 => 'user',
+    );
+
+    /**
+     * Location to pipe the output of at commands to
+     *
+     * I need to combine STDERR and STDOUT for my machine as when adding a new
+     * job `at` responds over STDERR because it wants to warn me
+     * "warning: commands will be executed using /bin/sh". When getting a list
+     * of jobs in the queue however it comes back over STDOUT.
+     *
+     * Combining the two allows me to use the same pipe command for both types
+     * of interaction with `at`. I think it is also the safest way of
+     * accommodating users who do not the have the problem of warning being
+     * triggered when adding a new job.
+     * 
+     * @var string
+     */
+    private static $pipeTo = '2>&1';
+
+    /**
+     * Switches/arguments that at uses on the `at` command
+     * @var array
+     */
+    private static $atSwitches = array(
+        'queue' => '-q',
+        'list_queue' => '-l',
+        'file' => '-f',
+        'remove' => '-d',
+    );
+
+    /**
+     * @uses self::addCommand
+     */
+    static public function cmd($command, $time, $queue = null) {
+        return self::addCommand($command, $time, $queue);
+    }
+
+    /**
+     * @uses self::addFile
+     */
+    static public function file($file, $time, $queue = null) {
+        return self::addFile($file, $time, $queue);
+    }
+
+    /**
+     * @uses self::listQueue
+     */
+    static public function lq($queue = null) {
+        return self::listQueue($queue);
+    }
+
+    /**
+     * Add a job to the `at` queue
+     * @param string $command
+     * @param string $time see `man at`
+     * @param string $queue a-zA-Z see `man at`
+     */
+    static public function addCommand($command, $time, $queue = null) {
+        $return = false;
+        $command = self::escape($command);
+        $time = self::escape($time);
+        $exec_string = "echo '$command' | " . self::$binary;
+        if(null !== $queue) {
+            $exec_string .= ' ' . self::$atSwitches['queue']  . " {$queue[0]}";
+        }
+        $exec_string .= " $time ";
+        return self::addJob($exec_string);
+    }
+
+    /**
+     * Add a file job to the `at` queue
+     * @param string $file Full path to the file to be executed
+     * @param string $time see `man at`
+     * @param string $queue a-zA-Z see `man at`
+     */
+    static public function addFile($file, $time, $queue = null) {
+        $return = false;
+        $file = self::escape($file);
+        $time = self::escape($time);
+        $exec_string = self::$binary . ' ' . self::$atSwitches['file'] . " $file";
+        if(null !== $queue) {
+            $exec_string .= ' ' . self::$atSwitches['queue'] . " {$queue[0]}";
+        }
+        $exec_string .= " $time ";
+        return self::addJob($exec_string);
+    }
+
+    /**
+     * Return a list of the jobs currently in the queue. If you do not specify
+     * a queue to look at then it will return all jobs in all queues.
+     * @param string $queue
+     * @return array of AtJob objects
+     */
+    static public function listQueue($queue = null) {
+        $exec_string = self::$binary . ' ' . self::$atSwitches['list_queue'];
+        if(null !== $queue) {
+            $exec_string .= ' ' . self::$atSwitches['queue'] . " {$queue[0]}";
+        }
+        return self::transform(self::exec($exec_string), 'queue');
+    }
+
+    static public function removeJob($job_number) {
+        $job_number = self::escape($job_number);
+        $exec_string = self::$binary . ' ' . self::$atSwitches['remove'] . " $job_number";
+        $output = self::exec($exec_string);
+        if(count($output)) {
+            throw new JobNotFoundException("The job number $job_number could not be found");
+        }
+    }
+
+    /**
+     * Add a job to the at queue and return the
+     * @param string $job_exec_string
+     * @return AtJob
+     */
+    static private function addJob($job_exec_string) {
+        $output = self::exec($job_exec_string);
+        $job = self::transform($output);
+        if(!count($job)) {
+            throw new JobAddException('The job has not been sucessfully
+                                            added to the queue. Exec command: '
+                                           . $job_exec_string);
+        }
+        return reset($job);
+    }
+
+    /**
+     * Transform the output of `at` into an array of objects
+     * @param array $output_array
+     * @param string $type Is this an add or list we are transforming?
+     * @return array An array of AtdJob objects
+     * @uses Treffynnon\At\Job
+     */
+    static private function transform($output_array, $type = 'add') {
+        $jobs = array();
+
+        // Get the appropriate regex class property for the type
+        // of `at` switch/command being run at this point in time.
+        $regex = $type . 'Regex';
+        $regex = self::$$regex;
+
+        $map = $type .'Map';
+        $map = self::$$map;
+        
+        foreach($output_array as $line) {
+            $matches = array();
+            preg_match($regex, $line, $matches);
+            if(count($matches) > count($map)) {
+                $jobs[] = self::mapJob($matches, $map);
+            }
+        }
+        return $jobs;
+    }
+
+    /**
+     * Map the details matched with the regex to descriptively named properties
+     * in a new Job object
+     * @param array $details
+     * @param array $map
+     * @return Job
+     */
+    static private function mapJob($details, $map) {
+        $Job = new Job();
+        foreach($details as $key => $detail) {
+            if(isset($map[$key])) {
+                $Job->$map[$key] = $detail;
+            }
+        }
+        return $Job;
+    }
+
+    /**
+     * Escape a string that will be passed to exec
+     * @param string $string
+     * @return string
+     */
+    static private function escape($string) {
+        return escapeshellcmd($string);
+    }
+
+    /**
+     * Run the command via exec() and return each line of the output as an
+     * array
+     * @param string $string
+     * @return array Each line of output is an element in the array
+     */
+    static private function exec($string) {
+        $output = array();
+        $string .= ' ' . self::$pipeTo;
+        exec($string, $output);
+        return $output;
+    }
+}
+
+/**
+ * A simple class for storing a jobs details and some methods for manipulating
+ * it.
+ *
+ * @author Simon Holywell
+ * @version 24.08.2010
+ */
+class Job {
+    private $data = array();
+
+    public function __set($name, $value) {
+        $this->data[$name] = $value;
+    }
+
+    public function __get($name) {
+        if (isset($this->data[$name])) {
+            return $this->data[$name];
+        }
+
+        $trace = debug_backtrace();
+        throw new UndefinedPropertyException(
+            'Undefined property via __get(): ' . $name .
+            ' in ' . $trace[0]['file'] .
+            ' on line ' . $trace[0]['line']
+        );
+    }
+
+    public function __isset($name) {
+        return isset($this->data[$name]);
+    }
+
+    public function __unset($name) {
+        unset($this->data[$name]);
+    }
+
+    /**
+     * @uses $this->remove()
+     */
+    public function rem() {
+        return $this->remove();
+    }
+
+    /**
+     * Remove this job from the queue
+     */
+    public function remove() {
+        if(isset($this->job_number)) {
+            Wrapper::removeJob((int)$this->job_number);
+
+        }
+    }
+}
+
+/**
+ * Triggered when attempting to access class property that has not yet been
+ * defined.
+ */
+class UndefinedPropertyException extends \Exception {}
+
+/**
+ * Triggered when the addition of a job to the queue has failed.
+ */
+class JobAddException extends \Exception {}
+
+/**
+ * Triggered when a job cannot be found in the queue
+ */
+class JobNotFoundException extends \Exception {}
