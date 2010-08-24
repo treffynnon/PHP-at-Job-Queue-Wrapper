@@ -146,7 +146,7 @@ class Wrapper {
      * Return a list of the jobs currently in the queue. If you do not specify
      * a queue to look at then it will return all jobs in all queues.
      * @param string $queue
-     * @return array of AtJob objects
+     * @return array of Treffynnon\At\Job objects
      */
     static public function listQueue($queue = null) {
         $exec_string = self::$binary . ' ' . self::$atSwitches['list_queue'];
@@ -168,7 +168,7 @@ class Wrapper {
     /**
      * Add a job to the at queue and return the
      * @param string $job_exec_string
-     * @return AtJob
+     * @return Treffynnon\At\Job
      */
     static private function addJob($job_exec_string) {
         $output = self::exec($job_exec_string);
@@ -185,7 +185,7 @@ class Wrapper {
      * Transform the output of `at` into an array of objects
      * @param array $output_array
      * @param string $type Is this an add or list we are transforming?
-     * @return array An array of AtdJob objects
+     * @return array An array of Treffynnon\At\Job objects
      * @uses Treffynnon\At\Job
      */
     static private function transform($output_array, $type = 'add') {
@@ -211,10 +211,10 @@ class Wrapper {
 
     /**
      * Map the details matched with the regex to descriptively named properties
-     * in a new Job object
+     * in a new Treffynnon\At\Job object
      * @param array $details
      * @param array $map
-     * @return Job
+     * @return Treffynnon\At\Job
      */
     static private function mapJob($details, $map) {
         $Job = new Job();

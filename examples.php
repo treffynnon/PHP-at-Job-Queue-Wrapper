@@ -18,7 +18,7 @@ $subject = 'Testing at wrapper';
 $body = '';
 
 $job_cmd = "php -r 'mail($email, $subject, $body);'";
-$job_file = __FILE__;
+$job_file = __FILE__; // set this to the path of your shell script etc.
 $job_time = 'now + 1min';
 try {
     var_dump('---Command: Adding to at---');

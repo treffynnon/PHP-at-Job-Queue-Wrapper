@@ -28,6 +28,9 @@ A PHP class to wrap the Unix/Linux at/atd job queue. At allows you to specify a 
 	
 	// get a list of all the jobs in the f queue
 	var_dump(At::lq('f'));
+	
+	// get a list of all the jobs in the c queue
+	var_dump(At::listQueue('c'));
 	?>
 
 PHP 5.3 is required to support the use of the namespace, but this could easily be removed to make it backwards compatible with PHP 5.1 and above.
