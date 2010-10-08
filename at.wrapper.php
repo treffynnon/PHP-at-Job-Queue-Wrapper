@@ -19,7 +19,7 @@ class Wrapper {
      * Regular expression to get the details of a job from the add job response
      * @var string
      */
-    private static $addRegex = '/^job (\d+) at \w+ (\w+) (\d\d?) (\d\d):(\d\d):(\d\d) (\d{4})$/';
+    private static $addRegex = '/^job (\d+) at \w+ (\w+)\s+(\d\d?) (\d\d):(\d\d):(\d\d) (\d{4})$/';
 
     /**
      * A map of the regex matches to thier descriptive names

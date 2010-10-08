@@ -19,6 +19,7 @@ class AtWrapperTest extends PHPUnit_Framework_TestCase {
         $file = $this->test_file;
         $time = 'now + 1min';
         $obj = At::file($file, $time);
+        $this->assertType('Treffynnon\At\Job', $obj);
     }
     
     public function tearDown() {
