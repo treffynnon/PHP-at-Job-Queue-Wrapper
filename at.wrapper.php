@@ -39,7 +39,7 @@ class Wrapper {
      * Regex to get the vitals from the queue
      * @var string
      */
-    private static $queueRegex = '/^(\d+)\s+\w+ (\w+) (\d\d?) (\d\d):(\d\d):(\d\d) (\d{4}) (\w) (\w+)$/';
+    private static $queueRegex = '/^(\d+)\s+\w+ (\w+)\s+(\d\d?) (\d\d):(\d\d):(\d\d) (\d{4}) (\w) (\w+)$/';
 
     /**
      * A map of the regex matches to thier descriptive names
@@ -153,9 +153,14 @@ class Wrapper {
         if(null !== $queue) {
             $exec_string .= ' ' . self::$atSwitches['queue'] . " {$queue[0]}";
         }
-        return self::transform(self::exec($exec_string), 'queue');
+        $result = self::exec($exec_string);
+        return self::transform($result, 'queue');
     }
 
+    /**
+    * Remove a job by job number
+    * @param int $job_number
+    */
     static public function removeJob($job_number) {
         $job_number = self::escape($job_number);
         $exec_string = self::$binary . ' ' . self::$atSwitches['remove'] . " $job_number";
