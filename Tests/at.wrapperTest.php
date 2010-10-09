@@ -1,5 +1,4 @@
 <?php
-//require_once 'PHPUnit/Framework.php';
 require_once 'at.wrapper.php';
 use Treffynnon\At\Wrapper as At;
 
@@ -28,9 +27,9 @@ class AtWrapperTest extends PHPUnit_Framework_TestCase {
         $this->setDependencies(array('testAtFile','testAtCmd'));
         $job = 'echo "hello" | wall';
         $time = 'now + 1min';
-        At::cmd($job, $time);
-        At::cmd($job, $time);
-        $array = At::lq();
+        At::cmd($job, $time, 't');
+        At::cmd($job, $time, 't');
+        $array = At::lq('t');
         $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $array);
         $this->assertGreaterThanOrEqual(2, count($array));
         $this->cleanUpJobs($array);
