@@ -52,3 +52,14 @@ To run the test you will need to install the PHPUnit framework, which is easily 
     phpunit Tests
 
 from the root directory of the at Job Queue Wrapper.
+
+
+Troubleshooting Failed Tests
+-----------------------------
+
+The tests may fail if your version of `at` outputs differently when a new job is added or when the `at` queue is listed. The class has to long but simple regular expressions defined as properties in it. With a little knowledge of regex you can modify these to suit the output of the `at` binary on your operating system.
+
+If you find that you need to modify these regexs then please lodge a ticket on [github][1].
+
+
+  [1]: https://github.com/treffynnon/PHP-at-Job-Queue-Wrapper/issues "PHP at Queue Wrapper - GitHub Issues Page"
