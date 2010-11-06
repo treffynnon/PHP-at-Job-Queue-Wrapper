@@ -42,3 +42,13 @@ Requires
 * Unix/Linux
 * at (you will already have this installed as it comes with Linux distributions)
 * PHP 5.3 and above due to the use of namespaces in the code
+
+
+Running the Tests
+------------------
+
+To run the test you will need to install the PHPUnit framework, which is easily done via PEAR. Once PHPUnit is installed you can simply run:
+
+    phpunit Tests
+
+from the root directory of the at Job Queue Wrapper.
