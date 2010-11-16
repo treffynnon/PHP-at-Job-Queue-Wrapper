@@ -62,4 +62,38 @@ The tests may fail if your version of `at` outputs differently when a new job is
 If you find that you need to modify these regexs then please lodge a ticket on [github][1].
 
 
+Currently Tested Output Styles
+-----------------------------
+
+### Redhat
+
+#### Add job
+
+    [root@server2 dgriffit]#  echo 'echo "hello" \| wall' | at now +10min
+    job 3 at 2010-11-15 10:54
+
+
+#### List queue
+
+    [root@server2 dgriffit]# at -l
+    2       2010-11-15 10:53 a root
+    3       2010-11-15 10:54 a root
+
+
+### Ubuntu
+
+#### Add job
+
+    simon@forge:~/PHP-at-Job-Queue-Wrapper$ echo 'echo "hello" \| wall' | at now +10min
+    warning: commands will be executed using /bin/sh
+    job 17 at Mon Nov 15 10:55:00 2010
+
+
+#### List queue
+
+    simon@forge:~/PHP-at-Job-Queue-Wrapper$ at -l
+    17      Mon Nov 15 10:55:00 2010 a simon
+    18      Mon Nov 15 10:55:00 2010 a simon
+
+
   [1]: https://github.com/treffynnon/PHP-at-Job-Queue-Wrapper/issues "PHP at Queue Wrapper - GitHub Issues Page"

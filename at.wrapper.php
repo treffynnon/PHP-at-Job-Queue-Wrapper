@@ -5,8 +5,8 @@ namespace Treffynnon\At;
  * native at binary does offer more, but it does contain the commonly used
  * functions and is enough for my purposes.
  *
- * @author Simon Holywell
- * @version 24.08.2010
+ * @author Simon Holywell <treffynnon@php.net>
+ * @version 16.11.2010
  */
 class Wrapper {
     /**
@@ -19,7 +19,7 @@ class Wrapper {
      * Regular expression to get the details of a job from the add job response
      * @var string
      */
-    private static $addRegex = '/^job (\d+) at \w+ (\w+)\s+(\d\d?) (\d\d):(\d\d):(\d\d) (\d{4})$/';
+    private static $addRegex = '/^job (\d+) at ([\w\d- :]+)$/';
 
     /**
      * A map of the regex matches to thier descriptive names
@@ -27,19 +27,14 @@ class Wrapper {
      */
     private static $addMap = array(
         1 => 'job_number',
-        2 => 'month',
-        3 => 'day',
-        4 => 'hour',
-        5 => 'minute',
-        6 => 'second',
-        7 => 'year',
+        2 => 'date',
     );
 
     /**
      * Regex to get the vitals from the queue
      * @var string
      */
-    private static $queueRegex = '/^(\d+)\s+\w+ (\w+)\s+(\d\d?) (\d\d):(\d\d):(\d\d) (\d{4}) (\w) (\w+)$/';
+    private static $queueRegex = '/^(\d+)\s+([\w\d- :]+) (\w) (\w+)$/';
 
     /**
      * A map of the regex matches to thier descriptive names
@@ -47,14 +42,9 @@ class Wrapper {
      */
     private static $queueMap = array(
         1 => 'job_number',
-        2 => 'month',
-        3 => 'day',
-        4 => 'hour',
-        5 => 'minute',
-        6 => 'second',
-        7 => 'year',
-        8 => 'queue',
-        9 => 'user',
+        2 => 'date',
+        3 => 'queue',
+        4 => 'user',
     );
 
     /**
@@ -256,18 +246,34 @@ class Wrapper {
 
 /**
  * A simple class for storing a jobs details and some methods for manipulating
- * it.
+ * it. A job model if you will.
  *
- * @author Simon Holywell
- * @version 24.08.2010
+ * @author Simon Holywell <treffynnon@php.net>
+ * @version 16.11.2010
  */
 class Job {
+    /**
+     * Data store for the job details
+     * @var array
+     */
     private $data = array();
 
+    /**
+     * Magic method to set a value in the $data
+     * property of the class
+     * @param string $name
+     * @param mixed $value 
+     */
     public function __set($name, $value) {
         $this->data[$name] = $value;
     }
 
+    /**
+     * Magic method to get a value in the $data property
+     * of the class
+     * @param string $name
+     * @return mixed
+     */
     public function __get($name) {
         if (isset($this->data[$name])) {
             return $this->data[$name];
@@ -281,15 +287,27 @@ class Job {
         );
     }
 
+    /**
+     * Magic method to check for the existence of an
+     * index in the $data property of the class
+     * @param string $name
+     * @return bool
+     */
     public function __isset($name) {
         return isset($this->data[$name]);
     }
 
+    /**
+     * Magic method to unset an index in the $data property
+     * of the class
+     * @param string $name 
+     */
     public function __unset($name) {
         unset($this->data[$name]);
     }
 
     /**
+     * Remove this job from the queue
      * @uses $this->remove()
      */
     public function rem() {
@@ -302,8 +320,18 @@ class Job {
     public function remove() {
         if(isset($this->job_number)) {
             Wrapper::removeJob((int)$this->job_number);
-
         }
+    }
+    
+    /**
+     * Get a DateTime object for date and time extracted from
+     * the output of `at`
+     * @example echo $job->date()->format('d-m-Y');
+     * @uses DateTime
+     * @return DateTime A PHP DateTime object
+     */
+    public function date() {
+        return new \DateTime($this->date);
     }
 }
 
