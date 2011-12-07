@@ -11,7 +11,7 @@ class AtWrapperTest extends \PHPUnit_Framework_TestCase {
         $job = 'echo "hello" | wall';
         $time = 'now + 1min';
         $obj = At::cmd($job, $time);
-        $this->assertType('Treffynnon\At\Job', $obj);
+        $this->assertInstanceOf('Treffynnon\At\Job', $obj);
         $this->cleanUpJobs($obj);
     }
 
@@ -19,7 +19,7 @@ class AtWrapperTest extends \PHPUnit_Framework_TestCase {
         $file = $this->test_file;
         $time = 'now + 1min';
         $obj = At::file($file, $time);
-        $this->assertType('Treffynnon\At\Job', $obj);
+        $this->assertInstanceOf('Treffynnon\At\Job', $obj);
         $this->cleanUpJobs($obj);
     }
     
@@ -30,7 +30,7 @@ class AtWrapperTest extends \PHPUnit_Framework_TestCase {
         At::cmd($job, $time, 't');
         At::cmd($job, $time, 't');
         $array = At::lq('t');
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $array);
+        $this->assertInternalType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $array);
         $this->assertGreaterThanOrEqual(2, count($array));
         $this->cleanUpJobs($array);
     }
