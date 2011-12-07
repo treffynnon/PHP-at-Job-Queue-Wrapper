@@ -2,7 +2,7 @@
 require_once 'at.wrapper.php';
 use Treffynnon\At\Wrapper as At;
 
-class AtWrapperTest extends PHPUnit_Framework_TestCase {
+class AtWrapperTest extends \PHPUnit_Framework_TestCase {
     protected $test_file = '';
     public function setUp() {
         $this->test_file = tempnam(sys_get_temp_dir(), 'php');
