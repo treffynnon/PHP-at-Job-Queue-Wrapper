@@ -1,0 +1,23 @@
+{
+    "name": "Treffynnon/PHP-at-Job-Queue-Wrapper",
+    "type": "library",
+    "description": "A PHP wrapper for the unix `at` queue",
+    "keywords": ["queue","job queue","at","linux"],
+    "homepage": "http://github.com/treffynnon/PHP-at-Job-Queue-Wrapper",
+    "license": "BSD",
+    "authors": [
+        {
+            "name": "Simon Holywell",
+            "email": "treffynnon@php.net",
+            "homepage": "http://simonholywell.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2"
+    },
+    "autoload": {
+        "psr-0": {
+            "Treffynnon\\At": "lib"
+        }
+    }
+}

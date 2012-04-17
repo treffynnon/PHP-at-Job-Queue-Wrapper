@@ -6,7 +6,7 @@ namespace Treffynnon\At;
  * functions and is enough for my purposes.
  *
  * @author Simon Holywell <treffynnon@php.net>
- * @version 16.11.2010
+ * @license BSD
  */
 class Wrapper {
     /**
