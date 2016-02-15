@@ -34,6 +34,21 @@ class AtWrapperTest extends \PHPUnit_Framework_TestCase {
         $this->assertGreaterThanOrEqual(2, count($array));
         $this->cleanUpJobs($array);
     }
+
+    public function testRegressionIssue2UsernameRegexDoesntSupportHyphens() {
+        $regex = TestableAtWrapper::getQueueRegex();
+        $test_strings = array(
+            '17      Mon Nov 15 10:55:00 2010 a simon',
+            '18      Mon Nov 15 10:55:00 2010 a simons-username',
+            '2       2010-11-15 10:53 a root',
+            '3       2010-11-15 10:54 a root-username-',
+        );
+        $m = 0;
+        foreach($test_strings as $test) {
+            $m += preg_match($regex, $test);
+        }
+        $this->assertSame($m, count($test_strings));
+    }
     
     public function tearDown() {
         unlink($this->test_file);
@@ -50,5 +65,11 @@ class AtWrapperTest extends \PHPUnit_Framework_TestCase {
                 
             }
         }
+    }
+}
+
+class TestableAtWrapper extends At {
+    public static function getQueueRegex() {
+        return static::$queueRegex;
     }
 }

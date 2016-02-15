@@ -13,19 +13,19 @@ class Wrapper {
      * The path to the `at` binary.
      * @var string
      */
-    private static $binary = 'at';
+    protected static $binary = 'at';
     
     /**
      * Regular expression to get the details of a job from the add job response
      * @var string
      */
-    private static $addRegex = '/^job (\d+) at ([\w\d- :]+)$/';
+    protected static $addRegex = '/^job (\d+) at ([\w\d- :]+)$/';
 
     /**
      * A map of the regex matches to thier descriptive names
      * @var array
      */
-    private static $addMap = array(
+    protected static $addMap = array(
         1 => 'job_number',
         2 => 'date',
     );
@@ -34,13 +34,13 @@ class Wrapper {
      * Regex to get the vitals from the queue
      * @var string
      */
-    private static $queueRegex = '/^(\d+)\s+([\w\d- :]+) (\w) (\w+)$/';
+    protected static $queueRegex = '/^(\d+)\s+([\w\d- :]+) (\w) ([\w-]+)$/';
 
     /**
      * A map of the regex matches to thier descriptive names
      * @var array
      */
-    private static $queueMap = array(
+    protected static $queueMap = array(
         1 => 'job_number',
         2 => 'date',
         3 => 'queue',
@@ -62,13 +62,13 @@ class Wrapper {
      * 
      * @var string
      */
-    private static $pipeTo = '2>&1';
+    protected static $pipeTo = '2>&1';
 
     /**
      * Switches/arguments that at uses on the `at` command
      * @var array
      */
-    private static $atSwitches = array(
+    protected static $atSwitches = array(
         'queue' => '-q',
         'list_queue' => '-l',
         'file' => '-f',
@@ -165,7 +165,7 @@ class Wrapper {
      * @param string $job_exec_string
      * @return Treffynnon\At\Job
      */
-    static private function addJob($job_exec_string) {
+    static protected function addJob($job_exec_string) {
         $output = self::exec($job_exec_string);
         $job = self::transform($output);
         if(!count($job)) {
@@ -183,7 +183,7 @@ class Wrapper {
      * @return array An array of Treffynnon\At\Job objects
      * @uses Treffynnon\At\Job
      */
-    static private function transform($output_array, $type = 'add') {
+    static protected function transform($output_array, $type = 'add') {
         $jobs = array();
 
         // Get the appropriate regex class property for the type
@@ -211,7 +211,7 @@ class Wrapper {
      * @param array $map
      * @return Treffynnon\At\Job
      */
-    static private function mapJob($details, $map) {
+    static protected function mapJob($details, $map) {
         $Job = new Job();
         foreach($details as $key => $detail) {
             if(isset($map[$key])) {
@@ -226,7 +226,7 @@ class Wrapper {
      * @param string $string
      * @return string
      */
-    static private function escape($string) {
+    static protected function escape($string) {
         return escapeshellcmd($string);
     }
 
@@ -236,7 +236,7 @@ class Wrapper {
      * @param string $string
      * @return array Each line of output is an element in the array
      */
-    static private function exec($string) {
+    static protected function exec($string) {
         $output = array();
         $string .= ' ' . self::$pipeTo;
         exec($string, $output);
@@ -256,7 +256,7 @@ class Job {
      * Data store for the job details
      * @var array
      */
-    private $data = array();
+    protected $data = array();
 
     /**
      * Magic method to set a value in the $data
