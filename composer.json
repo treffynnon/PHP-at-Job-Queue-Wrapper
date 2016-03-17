@@ -13,14 +13,34 @@
         }
     ],
     "require": {
-        "php": ">=5.3.2"
+        "php": ">=5.6",
+        "treffynnon/cmdwrap": "^1.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "3.*"
+        "phpspec/phpspec": "^2.4",
+        "squizlabs/php_codesniffer": "^2.5",
+        "sebastian/phpcpd": "^2.0",
+        "bossa/phpspec2-expect": "^1.0",
+        "phpunit/phpunit": "^5.2"
     },
     "autoload": {
-        "psr-0": {
-            "Treffynnon\\At": "lib"
+        "psr-4": {
+            "Treffynnon\\At\\": "src/"
         }
+    },
+    "scripts": {
+        "lint": [
+            "/usr/bin/env php -l src",
+            "vendor/bin/phpcs --standard=phpcs.xml --extensions=php .",
+            "vendor/bin/phpcpd src"
+        ],
+        "test": [
+            "@lint",
+            "vendor/bin/phpspec -v run src/",
+            "vendor/bin/phpunit -v integration"
+        ],
+        "post-install-cmd": "composer test",
+        "post-update-cmd": "composer test",
+        "post-autoload-dump": "composer test"
     }
 }

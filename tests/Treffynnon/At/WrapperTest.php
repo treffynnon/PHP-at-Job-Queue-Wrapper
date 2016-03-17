@@ -1,5 +1,6 @@
 <?php
-require_once __DIR__ . '/../../../lib/Treffynnon/At/Wrapper.php';
+require_once __DIR__ . '/../../../vendor/autoload.php';
+
 use Treffynnon\At\Wrapper as At;
 
 class AtWrapperTest extends \PHPUnit_Framework_TestCase {

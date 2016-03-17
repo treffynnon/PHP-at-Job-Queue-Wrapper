@@ -35,14 +35,11 @@ var_dump(At::lq('f'));
 var_dump(At::listQueue('c'));
 ```
 
-PHP 5.3 is required to support the use of the namespace, but this could easily be removed to make it backwards compatible with PHP 5.1 and above.
-
-
 ## Requires
 
 * Unix/Linux
-* at (you will already have this installed as it comes with Linux distributions)
-* PHP 5.3 and above due to the use of namespaces in the code
+* at (`sudo apt-get install at`)
+* PHP 5.6 and above due to the use of namespaces in the code
 
 
 ## Running the Tests

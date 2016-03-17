@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="Treffynnon">
+    <config name="ignore_warnings_on_exit" value="1"/>
+    <exclude-pattern>./vendor/*</exclude-pattern>
+    <exclude-pattern>./spec/**/*Spec.php</exclude-pattern>
+    <exclude-pattern>./integration/*</exclude-pattern>
+    <rule ref="PSR2"/>
+</ruleset>
