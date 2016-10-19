@@ -1,17 +1,17 @@
 <?php
 
-namespace Treffynnon\At\Job;
+namespace Treffynnon\At\Task;
 
-class File extends JobAbstract
+class File extends TaskAbstract
 {
     /**
      * @throws \Treffynnon\At\Exceptions\InvalidWhenArgument
      * @param string $task
      * @return bool
      */
-    public function validateTask($task)
+    public function validate($task)
     {
-        parent::validateTask($task);
+        parent::validate($task);
 
         if (!file_exists($task) ||
             !is_executable($task)) {

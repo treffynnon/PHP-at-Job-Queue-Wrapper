@@ -1,25 +1,25 @@
 <?php
 
-namespace Treffynnon\At\Job;
+namespace Treffynnon\At\Task;
 
-abstract class JobAbstract implements JobInterface
+abstract class TaskAbstract implements TaskInterface
 {
     protected $task = '';
     protected $when = 'now + 1min';
 
-    public function setTask($task)
+    public function set($task)
     {
-        if ($this->validateTask($task)) {
+        if ($this->validate($task)) {
             $this->task = $task;
         }
     }
 
-    public function getTask()
+    public function get()
     {
         return $this->task;
     }
 
-    public function validateTask($task)
+    public function validate($task)
     {
         if (empty($task)) {
             throw new \InvalidArgumentException(

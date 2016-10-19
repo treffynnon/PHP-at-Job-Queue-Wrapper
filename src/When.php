@@ -4,7 +4,7 @@ namespace Treffynnon\At;
 
 use Treffynnon\At\Exceptions\InvalidWhenArgument;
 
-class When
+class When implements WhenInterface
 {
     /**
      * @var string|\DateTimeInterface
@@ -17,14 +17,19 @@ class When
      */
     public function __construct($time)
     {
-         $this->setTime($time);
+         $this->set($time);
     }
 
-    public function setTime($time)
+    public function set($time)
     {
         if (is_string($time)) {
             $time = $this->coalesceNow($time);
             $this->validateTimeString($time);
+            $time = new \DateTimeImmutable($time);
+        } elseif (!($time instanceof \DateTimeInterface)) {
+            throw new InvalidWhenArgument(
+                'You must provide either a string or a DateTimeInterface'
+            );
         }
         $this->time = $time;
     }
@@ -39,8 +44,8 @@ class When
      */
     protected function coalesceNow($time)
     {
-        if ('now' == trim($time)) {
-            $time = trim($time) . ' + 1min';
+        if ('now' == trim($time) || 'next' == trim($time)) {
+            $time = 'now + 1 minute';
         }
         return $time;
     }
@@ -66,20 +71,17 @@ class When
             throw new InvalidWhenArgument(
                 'the date you have supplied is from the ' .
                 'past so the job would never run. you must ' .
-                'specify a time of `now + 1min` or greater.'
+                'specify a time of `now + 1 minute` or greater.'
             );
         }
+        return true;
     }
 
     /**
      * @return string
      */
-    public function getTime()
+    public function get()
     {
-        if ($this->time instanceof \DateTimeInterface) {
-            $this->validateDateTime($this->time);
-            return $this->time->format('YmdHi');
-        }
-        return $this->time;
+        return $this->time->format('YmdHi');
     }
 }

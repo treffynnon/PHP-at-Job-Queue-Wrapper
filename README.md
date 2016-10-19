@@ -93,3 +93,13 @@ If you find that you need to modify these regexs then please lodge a ticket on [
 
 [github]: https://github.com/treffynnon/PHP-at-Job-Queue-Wrapper/issues
 [man-page]: http://unixhelp.ed.ac.uk/CGI/man-cgi?at
+
+When - a valid time representation
+Task - the cmd or file to run
+Job - combination of when and task
+JobQueue - a collection/queue of Jobs
+
+At::file('/f/f/f/f/', 'now');
+- job = JobQueue->schedule(Job(FileTask('/f/f/f/f/'), When('now')))
+- job->delete()
+- JobQueue->delete(job->id);

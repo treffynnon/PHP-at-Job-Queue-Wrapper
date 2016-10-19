@@ -31,7 +31,7 @@
     "scripts": {
         "lint": [
             "/usr/bin/env php -l src",
-            "vendor/bin/phpcs --standard=phpcs.xml --extensions=php .",
+            "vendor/bin/phpcs --standard=phpcs.xml --extensions=php src",
             "vendor/bin/phpcpd src"
         ],
         "test": [
