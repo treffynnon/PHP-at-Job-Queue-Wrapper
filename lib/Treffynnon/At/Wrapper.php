@@ -215,7 +215,7 @@ class Wrapper {
         $Job = new Job();
         foreach($details as $key => $detail) {
             if(isset($map[$key])) {
-                $Job->$map[$key] = $detail;
+                $Job->{$map[$key]} = $detail;
             }
         }
         return $Job;
