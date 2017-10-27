@@ -1,5 +1,8 @@
 language: php
-php:
-  - 5.3
-  - 5.4
+matrix:
+    include:
+        - php: 5.3
+          dist: precise
+        - php: 5.4
+          dist: precise
 script: "phpunit tests"
