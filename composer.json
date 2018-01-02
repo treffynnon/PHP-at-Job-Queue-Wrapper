@@ -12,6 +12,9 @@
             "homepage": "http://simonholywell.com"
         }
     ],
+    "scripts": {
+        "test": "phpunit tests"
+    },
     "require": {
         "php": ">=5.3.2"
     },
