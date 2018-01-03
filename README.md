@@ -1,6 +1,6 @@
 # PHP at Job Queue Wrapper
 
-[![Build Status](https://secure.travis-ci.org/treffynnon/PHP-at-Job-Queue-Wrapper.png?branch=master)](http://travis-ci.org/treffynnon/PHP-at-Job-Queue-Wrapper)
+[![Build Status](https://secure.travis-ci.org/treffynnon/PHP-at-Job-Queue-Wrapper.png?branch=master)](http://travis-ci.org/treffynnon/PHP-at-Job-Queue-Wrapper) [![Latest Stable Version](https://poser.pugx.org/treffynnon/PHP-at-Job-Queue-Wrapper/v/stable.png)](https://packagist.org/packages/treffynnon/PHP-at-Job-Queue-Wrapper) [![Total Downloads](https://poser.pugx.org/treffynnon/PHP-at-Job-Queue-Wrapper/downloads.png)](https://packagist.org/packages/treffynnon/PHP-at-Job-Queue-Wrapper)
 
 A PHP class to wrap the Unix/Linux at/atd job queue. At allows you to specify a job that the system should run at certain point in time. For more information on at either run `man at` in your console or visit [man page][man-page] This class lets you add new items to the queue either as a command or a path to a file and it can also give you back a list of the jobs already in the queue. You have the option to supply a queue letter that the wrapper should use so you can seperate out your jobs. For example::
 
