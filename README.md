@@ -48,7 +48,7 @@ PHP 5.3 is required to support the use of the namespace, but this could easily b
 
 With composer already setup/init in your project you can add this project with:
 
-    composer require "Treffynnon/PHP-at-Job-Queue-Wrapper"
+    composer require treffynnon/php-at-job-queue-wrapper
 
 ## Running the Tests
 
