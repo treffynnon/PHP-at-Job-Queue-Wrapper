@@ -44,12 +44,21 @@ PHP 5.3 is required to support the use of the namespace, but this could easily b
 * at (you will already have this installed as it comes with Linux distributions)
 * PHP 5.3 and above due to the use of namespaces in the code
 
+## Installation
+
+With composer already setup/init in your project you can add this project with:
+
+    composer require "Treffynnon/PHP-at-Job-Queue-Wrapper"
 
 ## Running the Tests
 
-To run the test you will need to install the PHPUnit framework, which is easily done via PEAR. Once PHPUnit is installed you can simply run:
+Clone this repository and install the development dependencies using composer:
 
-    phpunit tests
+    composer install
+
+Once complete you can simply run:
+
+    composer run-script test
 
 from the root directory of the at Job Queue Wrapper.
 
