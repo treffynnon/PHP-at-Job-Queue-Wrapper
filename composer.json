@@ -4,7 +4,7 @@
     "description": "A PHP wrapper for the unix `at` queue",
     "keywords": ["queue","job queue","at","linux"],
     "homepage": "http://github.com/treffynnon/PHP-at-Job-Queue-Wrapper",
-    "license": "BSD",
+    "license": "BSD-2-Clause",
     "authors": [
         {
             "name": "Simon Holywell",
