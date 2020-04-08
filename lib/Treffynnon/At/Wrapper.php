@@ -19,10 +19,10 @@ class Wrapper {
      * Regular expression to get the details of a job from the add job response
      * @var string
      */
-    protected static $addRegex = '/^job (\d+) at ([\w\d- :]+)$/';
+    protected static $addRegex = '/^job (\d+) at ([\w\d\- :]+)$/';
 
     /**
-     * A map of the regex matches to thier descriptive names
+     * A map of the regex matches to their descriptive names
      * @var array
      */
     protected static $addMap = array(
@@ -34,10 +34,10 @@ class Wrapper {
      * Regex to get the vitals from the queue
      * @var string
      */
-    protected static $queueRegex = '/^(\d+)\s+([\w\d- :]+) (\w) ([\w-]+)$/';
+    protected static $queueRegex = '/^(\d+)\s+([\w\d\- :]+) (\w) ([\w-]+)$/';
 
     /**
-     * A map of the regex matches to thier descriptive names
+     * A map of the regex matches to their descriptive names
      * @var array
      */
     protected static $queueMap = array(
@@ -103,7 +103,6 @@ class Wrapper {
      * @param string $queue a-zA-Z see `man at`
      */
     static public function addCommand($command, $time, $queue = null) {
-        $return = false;
         $command = self::escape($command);
         $time = self::escape($time);
         $exec_string = "echo '$command' | " . self::$binary;
@@ -121,7 +120,6 @@ class Wrapper {
      * @param string $queue a-zA-Z see `man at`
      */
     static public function addFile($file, $time, $queue = null) {
-        $return = false;
         $file = self::escape($file);
         $time = self::escape($time);
         $exec_string = self::$binary . ' ' . self::$atSwitches['file'] . " $file";
@@ -169,7 +167,7 @@ class Wrapper {
         $output = self::exec($job_exec_string);
         $job = self::transform($output);
         if(!count($job)) {
-            throw new JobAddException('The job has not been sucessfully
+            throw new JobAddException('The job has not been successfully
                                             added to the queue. Exec command: '
                                            . $job_exec_string);
         }
