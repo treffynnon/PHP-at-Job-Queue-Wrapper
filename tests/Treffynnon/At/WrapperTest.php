@@ -1,8 +1,10 @@
 <?php
-require_once __DIR__ . '/../../../lib/Treffynnon/At/Wrapper.php';
+namespace Treffynnon\At\Tests;
+
+use PHPUnit\Framework\TestCase;
 use Treffynnon\At\Wrapper as At;
 
-class AtWrapperTest extends \PHPUnit_Framework_TestCase {
+class AtWrapperTest extends TestCase {
     protected $test_file = '';
     public function setUp() {
         $this->test_file = tempnam(sys_get_temp_dir(), 'php');
@@ -22,7 +24,7 @@ class AtWrapperTest extends \PHPUnit_Framework_TestCase {
         $this->assertInstanceOf('Treffynnon\At\Job', $obj);
         $this->cleanUpJobs($obj);
     }
-    
+
     public function testAtLq() {
         $this->setDependencies(array('testAtFile','testAtCmd'));
         $job = 'echo "hello" | wall';
@@ -30,7 +32,7 @@ class AtWrapperTest extends \PHPUnit_Framework_TestCase {
         At::cmd($job, $time, 't');
         At::cmd($job, $time, 't');
         $array = At::lq('t');
-        $this->assertInternalType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $array);
+        $this->assertInternalType('array', $array);
         $this->assertGreaterThanOrEqual(2, count($array));
         $this->cleanUpJobs($array);
     }
@@ -49,11 +51,11 @@ class AtWrapperTest extends \PHPUnit_Framework_TestCase {
         }
         $this->assertSame($m, count($test_strings));
     }
-    
+
     public function tearDown() {
         unlink($this->test_file);
     }
-    
+
     private function cleanUpJobs($jobs) {
         if(!is_array($jobs)) {
             $jobs = array($jobs);
@@ -62,14 +64,8 @@ class AtWrapperTest extends \PHPUnit_Framework_TestCase {
             try {
                 $job->rem();
             } catch(JobNotFoundException $e) {
-                
+
             }
         }
-    }
-}
-
-class TestableAtWrapper extends At {
-    public static function getQueueRegex() {
-        return static::$queueRegex;
     }
 }
