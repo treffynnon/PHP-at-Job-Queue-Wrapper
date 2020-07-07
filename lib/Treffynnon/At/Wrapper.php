@@ -14,7 +14,7 @@ class Wrapper {
      * @var string
      */
     protected static $binary = 'at';
-    
+
     /**
      * Regular expression to get the details of a job from the add job response
      * @var string
@@ -59,7 +59,7 @@ class Wrapper {
      * of interaction with `at`. I think it is also the safest way of
      * accommodating users who do not the have the problem of warning being
      * triggered when adding a new job.
-     * 
+     *
      * @var string
      */
     protected static $pipeTo = '2>&1';
@@ -191,7 +191,7 @@ class Wrapper {
 
         $map = $type .'Map';
         $map = self::$$map;
-        
+
         foreach($output_array as $line) {
             $matches = array();
             preg_match($regex, $line, $matches);
@@ -260,7 +260,7 @@ class Job {
      * Magic method to set a value in the $data
      * property of the class
      * @param string $name
-     * @param mixed $value 
+     * @param mixed $value
      */
     public function __set($name, $value) {
         $this->data[$name] = $value;
@@ -298,7 +298,7 @@ class Job {
     /**
      * Magic method to unset an index in the $data property
      * of the class
-     * @param string $name 
+     * @param string $name
      */
     public function __unset($name) {
         unset($this->data[$name]);
@@ -320,7 +320,7 @@ class Job {
             Wrapper::removeJob((int)$this->job_number);
         }
     }
-    
+
     /**
      * Get a DateTime object for date and time extracted from
      * the output of `at`
@@ -332,19 +332,3 @@ class Job {
         return new \DateTime($this->date);
     }
 }
-
-/**
- * Triggered when attempting to access class property that has not yet been
- * defined.
- */
-class UndefinedPropertyException extends \Exception {}
-
-/**
- * Triggered when the addition of a job to the queue has failed.
- */
-class JobAddException extends \Exception {}
-
-/**
- * Triggered when a job cannot be found in the queue
- */
-class JobNotFoundException extends \Exception {}

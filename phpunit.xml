@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="vendor/autoload.php"
+         colors="true"
+         backupGlobals="false"
+         backupStaticAttributes="false"
+         timeoutForLargeTests="900">
+    <testsuites>
+        <testsuite name="Tests">
+            <directory suffix="Test.php">tests</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="false">
+            <directory suffix=".php">lib</directory>
+            <exclude>
+                <directory>vendor</directory>
+                <directory>build</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+</phpunit>
