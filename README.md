@@ -4,6 +4,10 @@
 
 A PHP class to wrap the Unix/Linux at/atd job queue. At allows you to specify a job that the system should run at certain point in time. For more information on at either run `man at` in your console or visit [man page][man-page] This class lets you add new items to the queue either as a command or a path to a file and it can also give you back a list of the jobs already in the queue. You have the option to supply a queue letter that the wrapper should use so you can seperate out your jobs. For example::
 
+# Migrate to v2
+
+**Since the PHP 7.x version has been released for about whiles, the `1.x` version will not be active and please concern about `v2` branch and use `2.x` version.**
+
 ```php
 require 'vendor/autoload.php';
 use Treffynnon\At\Wrapper as At
