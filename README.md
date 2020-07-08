@@ -1,3 +1,12 @@
+# Deprecated
+Since the `master` branch is continuous for support PHP 7.x.
+
+**Please consider following stuffs:**
+
+- `1.x` version will be no longer maintained. The `1.0.5` will be last version.
+- `2.x` version will be active now.
+- `v2` branch will be deprecated.
+
 # PHP at Job Queue Wrapper
 
 [![Build Status](https://secure.travis-ci.org/treffynnon/PHP-at-Job-Queue-Wrapper.png?branch=master)](http://travis-ci.org/treffynnon/PHP-at-Job-Queue-Wrapper)
