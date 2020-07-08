@@ -25,10 +25,10 @@ class Wrapper {
      * A map of the regex matches to their descriptive names
      * @var array
      */
-    protected static $addMap = array(
+    protected static $addMap = [
         1 => 'job_number',
         2 => 'date',
-    );
+    ];
 
     /**
      * Regex to get the vitals from the queue
@@ -40,12 +40,12 @@ class Wrapper {
      * A map of the regex matches to their descriptive names
      * @var array
      */
-    protected static $queueMap = array(
+    protected static $queueMap = [
         1 => 'job_number',
         2 => 'date',
         3 => 'queue',
         4 => 'user',
-    );
+    ];
 
     /**
      * Location to pipe the output of at commands to
@@ -68,31 +68,31 @@ class Wrapper {
      * Switches/arguments that at uses on the `at` command
      * @var array
      */
-    protected static $atSwitches = array(
+    protected static $atSwitches = [
         'queue' => '-q',
         'list_queue' => '-l',
         'file' => '-f',
         'remove' => '-d',
-    );
+    ];
 
     /**
      * @uses self::addCommand
      */
-    static public function cmd($command, $time, $queue = null) {
+    public static function cmd($command, $time, $queue = null) {
         return self::addCommand($command, $time, $queue);
     }
 
     /**
      * @uses self::addFile
      */
-    static public function file($file, $time, $queue = null) {
+    public static function file($file, $time, $queue = null) {
         return self::addFile($file, $time, $queue);
     }
 
     /**
      * @uses self::listQueue
      */
-    static public function lq($queue = null) {
+    public static function lq($queue = null) {
         return self::listQueue($queue);
     }
 
@@ -102,7 +102,7 @@ class Wrapper {
      * @param string $time see `man at`
      * @param string $queue a-zA-Z see `man at`
      */
-    static public function addCommand($command, $time, $queue = null) {
+    public static function addCommand($command, $time, $queue = null) {
         $command = self::escape($command);
         $time = self::escape($time);
         $exec_string = "echo '$command' | " . self::$binary;
@@ -119,7 +119,7 @@ class Wrapper {
      * @param string $time see `man at`
      * @param string $queue a-zA-Z see `man at`
      */
-    static public function addFile($file, $time, $queue = null) {
+    public static function addFile($file, $time, $queue = null) {
         $file = self::escape($file);
         $time = self::escape($time);
         $exec_string = self::$binary . ' ' . self::$atSwitches['file'] . " $file";
@@ -136,7 +136,7 @@ class Wrapper {
      * @param string $queue
      * @return array of Treffynnon\At\Job objects
      */
-    static public function listQueue($queue = null) {
+    public static function listQueue($queue = null) {
         $exec_string = self::$binary . ' ' . self::$atSwitches['list_queue'];
         if(null !== $queue) {
             $exec_string .= ' ' . self::$atSwitches['queue'] . " {$queue[0]}";
@@ -149,7 +149,7 @@ class Wrapper {
     * Remove a job by job number
     * @param int $job_number
     */
-    static public function removeJob($job_number) {
+    public static function removeJob($job_number) {
         $job_number = self::escape($job_number);
         $exec_string = self::$binary . ' ' . self::$atSwitches['remove'] . " $job_number";
         $output = self::exec($exec_string);
@@ -163,7 +163,7 @@ class Wrapper {
      * @param string $job_exec_string
      * @return Treffynnon\At\Job
      */
-    static protected function addJob($job_exec_string) {
+    protected static function addJob($job_exec_string) {
         $output = self::exec($job_exec_string);
         $job = self::transform($output);
         if(!count($job)) {
@@ -181,8 +181,8 @@ class Wrapper {
      * @return array An array of Treffynnon\At\Job objects
      * @uses Treffynnon\At\Job
      */
-    static protected function transform($output_array, $type = 'add') {
-        $jobs = array();
+    protected static function transform($output_array, $type = 'add') {
+        $jobs = [];
 
         // Get the appropriate regex class property for the type
         // of `at` switch/command being run at this point in time.
@@ -193,7 +193,7 @@ class Wrapper {
         $map = self::$$map;
 
         foreach($output_array as $line) {
-            $matches = array();
+            $matches = [];
             preg_match($regex, $line, $matches);
             if(count($matches) > count($map)) {
                 $jobs[] = self::mapJob($matches, $map);
@@ -209,7 +209,7 @@ class Wrapper {
      * @param array $map
      * @return Treffynnon\At\Job
      */
-    static protected function mapJob($details, $map) {
+    protected static function mapJob($details, $map) {
         $Job = new Job();
         foreach($details as $key => $detail) {
             if(isset($map[$key])) {
@@ -224,7 +224,7 @@ class Wrapper {
      * @param string $string
      * @return string
      */
-    static protected function escape($string) {
+    protected static function escape($string) {
         return escapeshellcmd($string);
     }
 
@@ -234,8 +234,8 @@ class Wrapper {
      * @param string $string
      * @return array Each line of output is an element in the array
      */
-    static protected function exec($string) {
-        $output = array();
+    protected static function exec($string) {
+        $output = [];
         $string .= ' ' . self::$pipeTo;
         exec($string, $output);
         return $output;
@@ -254,7 +254,7 @@ class Job {
      * Data store for the job details
      * @var array
      */
-    protected $data = array();
+    protected $data = [];
 
     /**
      * Magic method to set a value in the $data

@@ -26,7 +26,7 @@ class AtWrapperTest extends TestCase {
     }
 
     public function testAtLq() {
-        $this->setDependencies(array('testAtFile','testAtCmd'));
+        $this->setDependencies(['testAtFile','testAtCmd']);
         $job = 'echo "hello" | wall';
         $time = 'now + 1min';
         At::cmd($job, $time, 't');
@@ -39,12 +39,12 @@ class AtWrapperTest extends TestCase {
 
     public function testRegressionIssue2UsernameRegexDoesntSupportHyphens() {
         $regex = TestableAtWrapper::getQueueRegex();
-        $test_strings = array(
+        $test_strings = [
             '17      Mon Nov 15 10:55:00 2010 a simon',
             '18      Mon Nov 15 10:55:00 2010 a simons-username',
             '2       2010-11-15 10:53 a root',
             '3       2010-11-15 10:54 a root-username-',
-        );
+        ];
         $m = 0;
         foreach($test_strings as $test) {
             $m += preg_match($regex, $test);
@@ -58,7 +58,7 @@ class AtWrapperTest extends TestCase {
 
     private function cleanUpJobs($jobs) {
         if(!is_array($jobs)) {
-            $jobs = array($jobs);
+            $jobs = [$jobs];
         }
         foreach($jobs as $job) {
             try {
