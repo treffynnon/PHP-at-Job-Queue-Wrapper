@@ -6,7 +6,7 @@ A PHP class to wrap the Unix/Linux at/atd job queue. At allows you to specify a 
 
 # Migrate to v2
 
-**Since the PHP 7.x version has been released for about whiles, the `1.x` version will not be active and please concern about `v2` branch and use `2.x` version.**
+**Since the PHP 7.x version has been released for about whiles, the `1.x` version will not be active and please concern about `2.x` version.**
 
 ```php
 require 'vendor/autoload.php';
