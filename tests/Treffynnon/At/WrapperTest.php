@@ -6,7 +6,7 @@ use Treffynnon\At\Wrapper as At;
 
 class AtWrapperTest extends TestCase {
     protected $test_file = '';
-    public function setUp() {
+    protected function setUp(): void {
         $this->test_file = tempnam(sys_get_temp_dir(), 'php');
     }
     public function testAtCmd() {
@@ -32,7 +32,7 @@ class AtWrapperTest extends TestCase {
         At::cmd($job, $time, 't');
         At::cmd($job, $time, 't');
         $array = At::lq('t');
-        $this->assertInternalType('array', $array);
+        $this->assertIsArray($array);
         $this->assertGreaterThanOrEqual(2, count($array));
         $this->cleanUpJobs($array);
     }
@@ -52,7 +52,7 @@ class AtWrapperTest extends TestCase {
         $this->assertSame($m, count($test_strings));
     }
 
-    public function tearDown() {
+    protected function tearDown(): void {
         unlink($this->test_file);
     }
 

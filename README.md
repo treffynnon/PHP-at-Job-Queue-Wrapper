@@ -46,7 +46,8 @@ PHP 5.3 is required to support the use of the namespace, but this could easily b
 
 * Unix/Linux
 * at (you will already have this installed as it comes with Linux distributions)
-* PHP 5.3 and above due to the use of namespaces in the code
+* If using PHP 5.3 and above due to the use of namespaces in the code, please use `1.x` versions.
+* If using PHP 7.2+ version, please use `2.x` versions. **It will not support PHP 7.0 and PHP 7.1 versions**.
 
 ## Installation
 
