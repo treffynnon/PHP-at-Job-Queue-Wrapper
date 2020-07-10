@@ -111,7 +111,7 @@ class Job
      *
      * @example echo $job->date()->format('d-m-Y');
      *
-     * @param string $date
+     * @param string $date The date string
      *
      * @uses DateTime
      *
