@@ -90,6 +90,8 @@ class Wrapper
      * @param string $queue Please look at a-zA-Z and see `man at`
      *
      * @uses self::addCommand
+     *
+     * @return Job
      */
     public static function cmd($command, $time, $queue = null)
     {
@@ -102,6 +104,8 @@ class Wrapper
      * @param string $queue Please look at a-zA-Z and see `man at`
      *
      * @uses self::addFile
+     *
+     * @return Job
      */
     public static function file($file, $time, $queue = null)
     {
@@ -112,6 +116,8 @@ class Wrapper
      * @param string $queue Please look at a-zA-Z and see `man at`
      *
      * @uses self::listQueue
+     *
+     * @return array
      */
     public static function lq($queue = null)
     {
@@ -125,7 +131,7 @@ class Wrapper
      * @param string $time Please see `man at`
      * @param string $queue Please look at a-zA-Z and see `man at`
      *
-     * @return Treffynnon\At\Job
+     * @return Job
      */
     public static function addCommand($command, $time, $queue = null)
     {
@@ -147,7 +153,7 @@ class Wrapper
      * @param string $time Please see `man at`
      * @param string $queue Please look at a-zA-Z and see `man at`
      *
-     * @return Treffynnon\At\Job
+     * @return Job
      */
     public static function addFile($file, $time, $queue = null)
     {
@@ -168,7 +174,7 @@ class Wrapper
      *
      * @param string $queue Please look at a-zA-Z and see `man at`
      *
-     * @return array of Treffynnon\At\Job objects
+     * @return array
      */
     public static function listQueue($queue = null)
     {
@@ -185,10 +191,12 @@ class Wrapper
      * Remove a job by job number.
      *
      * @param int $job_number The current job number
+     *
+     * @return void
      */
     public static function removeJob($job_number)
     {
-        $job_number = self::escape($job_number);
+        $job_number = self::escape((string)$job_number);
         $exec_string = self::$binary . ' ' . self::$atSwitches['remove'] . " $job_number";
         $output = self::exec($exec_string);
         if (count($output)) {
@@ -201,7 +209,7 @@ class Wrapper
      *
      * @param string $job_exec_string The job execution string
      *
-     * @return Treffynnon\At\Job
+     * @return Job
      */
     protected static function addJob($job_exec_string)
     {
@@ -256,7 +264,7 @@ class Wrapper
      * @param array $details The details about job description
      * @param array $map The mapped job array
      *
-     * @return Treffynnon\At\Job
+     * @return Job
      */
     protected static function mapJob($details, $map)
     {
