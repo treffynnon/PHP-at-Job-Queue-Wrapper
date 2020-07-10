@@ -93,6 +93,22 @@ class WrapperTest extends TestCase
     }
 
     /**
+     * Test that can at cmd can be unescaped.
+     */
+    public function testAtCmdCanBeUnescaped()
+    {
+        $job = 'echo \"12345\" > /tmp/echo.log 2>&1';
+        $at = new At();
+        $at = $at->setEscape(false);
+        $at::cmd($job, 'now + 2min', 'c');
+
+        $jobNumber = exec("at -l | head -n 1 | awk '{print $1}'");
+        $result = exec('at -c ' . $jobNumber . ' | tail -n 2 | head -n 1');
+
+        $this->assertSame($job, $result);
+    }
+
+    /**
      * PHPUnit fixtures for tearDown.
      *
      * @return void
