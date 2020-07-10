@@ -97,15 +97,15 @@ class WrapperTest extends TestCase
      */
     public function testAtCmdCanBeUnescaped()
     {
-        $job = "echo \"12345\" > /tmp/echo.log 2>&1";
+        $job = 'echo \"12345\" > /tmp/echo.log 2>&1';
         $at = new At();
         $at = $at->setEscape(false);
         $at::cmd($job, 'now + 2min', 'c');
 
         $jobNumber = exec("at -l | head -n 1 | awk '{print $1}'");
-        $expected = exec("at -c " . $jobNumber . " | tail -n 2 | head -n 1");
+        $result = exec('at -c ' . $jobNumber . ' | tail -n 2 | head -n 1');
 
-        $this->assertSame($job, $expected);
+        $this->assertSame($job, $result);
     }
 
     /**
