@@ -19,8 +19,8 @@ jobs:
         uses: shivammathur/setup-php@v1
         with:
           php-version: ${{ matrix.php-versions }}
-          extensions: mbstring, pdo, pdo_mysql, intl, zip, xdebug
-          coverage: none
+          extensions: mbstring, pdo, pdo_mysql, intl, zip
+          coverage: xdebug
 
       - name: Check PHP Version
         run: php -v
