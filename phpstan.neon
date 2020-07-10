@@ -1,0 +1,4 @@
+parameters:
+	reportUnmatchedIgnoredErrors: false
+	checkMissingIterableValueType: false
+	checkGenericClassInNonGenericObjectType: false

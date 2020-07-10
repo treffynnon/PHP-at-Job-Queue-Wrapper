@@ -90,7 +90,7 @@ class Job
      */
     public function rem()
     {
-        return $this->remove();
+        $this->remove();
     }
 
     /**
@@ -111,12 +111,14 @@ class Job
      *
      * @example echo $job->date()->format('d-m-Y');
      *
+     * @param string $date
+     *
      * @uses DateTime
      *
-     * @return DateTime A PHP DateTime object
+     * @return \DateTime A PHP DateTime object
      */
-    public function date()
+    public function date(string $date)
     {
-        return new \DateTime($this->date);
+        return new \DateTime($date);
     }
 }
