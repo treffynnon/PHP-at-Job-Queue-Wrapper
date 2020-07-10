@@ -1,4 +1,5 @@
 <?php
+
 namespace Treffynnon\At\Tests;
 
 use Treffynnon\At\Wrapper as At;

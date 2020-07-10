@@ -1,21 +1,22 @@
 <?php
+
 namespace Treffynnon\At\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Treffynnon\At\Wrapper as At;
 use Treffynnon\At\JobNotFoundException;
+use Treffynnon\At\Wrapper as At;
 
-class AtWrapperTest extends TestCase
+class WrapperTest extends TestCase
 {
     /**
-     * The tested file name
+     * The tested file name.
      *
      * @var string
      */
     protected $test_file = '';
 
     /**
-     * PHPUnit fixtures for setUp
+     * PHPUnit fixtures for setUp.
      *
      * @return void
      */
@@ -25,7 +26,7 @@ class AtWrapperTest extends TestCase
     }
 
     /**
-     * Test that can create a scheduled job with at
+     * Test that can create a scheduled job with at.
      *
      * @return void
      */
@@ -39,7 +40,7 @@ class AtWrapperTest extends TestCase
     }
 
     /**
-     * Test that can use file to create scheduled job with at
+     * Test that can use file to create scheduled job with at.
      *
      * @return void
      */
@@ -53,13 +54,13 @@ class AtWrapperTest extends TestCase
     }
 
     /**
-     * Test that can get the queued job lists with at
+     * Test that can get the queued job lists with at.
      *
      * @return void
      */
     public function testAtLq()
     {
-        $this->setDependencies(['testAtFile','testAtCmd']);
+        $this->setDependencies(['testAtFile', 'testAtCmd']);
         $job = 'echo "hello" | wall';
         $time = 'now + 1min';
         At::cmd($job, $time, 't');
@@ -71,7 +72,7 @@ class AtWrapperTest extends TestCase
     }
 
     /**
-     * Test that can use regular expression to parse queued job lists with at
+     * Test that can use regular expression to parse queued job lists with at.
      *
      * @return void
      */
@@ -92,7 +93,7 @@ class AtWrapperTest extends TestCase
     }
 
     /**
-     * PHPUnit fixtures for tearDown
+     * PHPUnit fixtures for tearDown.
      *
      * @return void
      */
@@ -102,7 +103,7 @@ class AtWrapperTest extends TestCase
     }
 
     /**
-     * Clean up job lists
+     * Clean up job lists.
      *
      * @param mixed $jobs The queued job lists
      *
