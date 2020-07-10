@@ -1,4 +1,5 @@
 <?php
+
 namespace Treffynnon\At;
 
 /**
@@ -19,14 +20,14 @@ class Wrapper
     protected static $binary = 'at';
 
     /**
-     * Regular expression to get the details of a job from the add job response
+     * Regular expression to get the details of a job from the add job response.
      *
      * @var string
      */
     protected static $addRegex = '/^job (\d+) at ([\w\d\- :]+)$/';
 
     /**
-     * A map of the regex matches to their descriptive names
+     * A map of the regex matches to their descriptive names.
      *
      * @var array
      */
@@ -36,14 +37,14 @@ class Wrapper
     ];
 
     /**
-     * Regex to get the vitals from the queue
+     * Regex to get the vitals from the queue.
      *
      * @var string
      */
     protected static $queueRegex = '/^(\d+)\s+([\w\d\- :]+) (\w) ([\w-]+)$/';
 
     /**
-     * A map of the regex matches to their descriptive names
+     * A map of the regex matches to their descriptive names.
      *
      * @var array
      */
@@ -55,7 +56,7 @@ class Wrapper
     ];
 
     /**
-     * Location to pipe the output of at commands to
+     * Location to pipe the output of at commands to.
      *
      * I need to combine STDERR and STDOUT for my machine as when adding a new
      * job `at` responds over STDERR because it wants to warn me
@@ -72,7 +73,7 @@ class Wrapper
     protected static $pipeTo = '2>&1';
 
     /**
-     * Switches/arguments that at uses on the `at` command
+     * Switches/arguments that at uses on the `at` command.
      *
      * @var array
      */
@@ -87,6 +88,7 @@ class Wrapper
      * @param string $command The current command
      * @param string $time Please see `man at`
      * @param string $queue Please look at a-zA-Z and see `man at`
+     *
      * @uses self::addCommand
      */
     public static function cmd($command, $time, $queue = null)
@@ -108,6 +110,7 @@ class Wrapper
 
     /**
      * @param string $queue Please look at a-zA-Z and see `man at`
+     *
      * @uses self::listQueue
      */
     public static function lq($queue = null)
@@ -116,7 +119,7 @@ class Wrapper
     }
 
     /**
-     * Add a job to the `at` queue
+     * Add a job to the `at` queue.
      *
      * @param string $command The current command
      * @param string $time Please see `man at`
@@ -130,14 +133,15 @@ class Wrapper
         $time = self::escape($time);
         $exec_string = "echo '$command' | " . self::$binary;
         if (null !== $queue) {
-            $exec_string .= ' ' . self::$atSwitches['queue']  . " {$queue[0]}";
+            $exec_string .= ' ' . self::$atSwitches['queue'] . " {$queue[0]}";
         }
         $exec_string .= " $time ";
+
         return self::addJob($exec_string);
     }
 
     /**
-     * Add a file job to the `at` queue
+     * Add a file job to the `at` queue.
      *
      * @param string $file Full path to the file to be executed
      * @param string $time Please see `man at`
@@ -173,14 +177,15 @@ class Wrapper
             $exec_string .= ' ' . self::$atSwitches['queue'] . " {$queue[0]}";
         }
         $result = self::exec($exec_string);
+
         return self::transform($result, 'queue');
     }
 
     /**
-    * Remove a job by job number
-
-    * @param int $job_number The current job number
-    */
+     * Remove a job by job number.
+     *
+     * @param int $job_number The current job number
+     */
     public static function removeJob($job_number)
     {
         $job_number = self::escape($job_number);
@@ -192,7 +197,7 @@ class Wrapper
     }
 
     /**
-     * Add a job to the at queue and return the
+     * Add a job to the at queue and return the.
      *
      * @param string $job_exec_string The job execution string
      *
@@ -212,7 +217,7 @@ class Wrapper
     }
 
     /**
-     * Transform the output of `at` into an array of objects
+     * Transform the output of `at` into an array of objects.
      *
      * @param array $output_array The output with array
      * @param string $type Is this an add or list we are transforming?
@@ -230,7 +235,7 @@ class Wrapper
         $regex = $type . 'Regex';
         $regex = self::$$regex;
 
-        $map = $type .'Map';
+        $map = $type . 'Map';
         $map = self::$$map;
 
         foreach ($output_array as $line) {
@@ -240,12 +245,13 @@ class Wrapper
                 $jobs[] = self::mapJob($matches, $map);
             }
         }
+
         return $jobs;
     }
 
     /**
      * Map the details matched with the regex to descriptively named properties
-     * in a new Treffynnon\At\Job object
+     * in a new Treffynnon\At\Job object.
      *
      * @param array $details The details about job description
      * @param array $map The mapped job array
@@ -260,11 +266,12 @@ class Wrapper
                 $Job->{$map[$key]} = $detail;
             }
         }
+
         return $Job;
     }
 
     /**
-     * Escape a string that will be passed to exec
+     * Escape a string that will be passed to exec.
      *
      * @param string $string The executed command
      *
@@ -277,7 +284,7 @@ class Wrapper
 
     /**
      * Run the command via exec() and return each line of the output as an
-     * array
+     * array.
      *
      * @param string $string The executed string
      *
@@ -288,6 +295,7 @@ class Wrapper
         $output = [];
         $string .= ' ' . self::$pipeTo;
         exec($string, $output);
+
         return $output;
     }
 }

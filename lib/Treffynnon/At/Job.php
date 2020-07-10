@@ -1,4 +1,5 @@
 <?php
+
 namespace Treffynnon\At;
 
 /**
@@ -6,12 +7,13 @@ namespace Treffynnon\At;
  * it. A job model if you will.
  *
  * @author Simon Holywell <treffynnon@php.net>
+ *
  * @version 16.11.2010
  */
 class Job
 {
     /**
-     * Data store for the job details
+     * Data store for the job details.
      *
      * @var array
      */
@@ -19,7 +21,7 @@ class Job
 
     /**
      * Magic method to set a value in the $data
-     * property of the class
+     * property of the class.
      *
      * @param string $name The key of data array
      * @param mixed $value The value of data array
@@ -33,7 +35,7 @@ class Job
 
     /**
      * Magic method to get a value in the $data property
-     * of the class
+     * of the class.
      *
      * @param string $name The key of data array
      *
@@ -55,7 +57,7 @@ class Job
 
     /**
      * Magic method to check for the existence of an
-     * index in the $data property of the class
+     * index in the $data property of the class.
      *
      * @param string $name The key of data array
      *
@@ -68,7 +70,7 @@ class Job
 
     /**
      * Magic method to unset an index in the $data property
-     * of the class
+     * of the class.
      *
      * @param string $name The key of data array
      *
@@ -80,7 +82,7 @@ class Job
     }
 
     /**
-     * Remove this job from the queue
+     * Remove this job from the queue.
      *
      * @uses $this->remove()
      *
@@ -92,7 +94,7 @@ class Job
     }
 
     /**
-     * Remove this job from the queue
+     * Remove this job from the queue.
      *
      * @return void
      */
@@ -105,9 +107,10 @@ class Job
 
     /**
      * Get a DateTime object for date and time extracted from
-     * the output of `at`
+     * the output of `at`.
      *
      * @example echo $job->date()->format('d-m-Y');
+     *
      * @uses DateTime
      *
      * @return DateTime A PHP DateTime object
