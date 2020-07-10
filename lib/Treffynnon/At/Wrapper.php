@@ -56,6 +56,13 @@ class Wrapper
     ];
 
     /**
+     * Set escape whether using the escapeshellcmd before add command.
+     *
+     * @var bool
+     */
+    protected static $escape = true;
+
+    /**
      * Location to pipe the output of at commands to.
      *
      * I need to combine STDERR and STDOUT for my machine as when adding a new
@@ -125,6 +132,30 @@ class Wrapper
     }
 
     /**
+     * Set escape param.
+     *
+     * @param bool $escape The escaped command
+     *
+     * @return self
+     */
+    public function setEscape($escape)
+    {
+        self::$escape = $escape;
+
+        return $this;
+    }
+
+    /**
+     * Get escape param.
+     *
+     * @return bool
+     */
+    public static function getEscape()
+    {
+        return self::$escape;
+    }
+
+    /**
      * Add a job to the `at` queue.
      *
      * @param string $command The current command
@@ -135,8 +166,10 @@ class Wrapper
      */
     public static function addCommand($command, $time, $queue = null)
     {
-        $command = self::escape($command);
-        $time = self::escape($time);
+        if (true === self::$escape) {
+            $command = self::escape($command);
+            $time = self::escape($time);
+        }
         $exec_string = "echo '$command' | " . self::$binary;
         if (null !== $queue) {
             $exec_string .= ' ' . self::$atSwitches['queue'] . " {$queue[0]}";
@@ -157,8 +190,10 @@ class Wrapper
      */
     public static function addFile($file, $time, $queue = null)
     {
-        $file = self::escape($file);
-        $time = self::escape($time);
+        if (true === self::$escape) {
+            $file = self::escape($file);
+            $time = self::escape($time);
+        }
         $exec_string = self::$binary . ' ' . self::$atSwitches['file'] . " $file";
         if (null !== $queue) {
             $exec_string .= ' ' . self::$atSwitches['queue'] . " {$queue[0]}";
@@ -196,7 +231,9 @@ class Wrapper
      */
     public static function removeJob($job_number)
     {
-        $job_number = self::escape((string)$job_number);
+        if (true === self::$escape) {
+            $job_number = self::escape((string)$job_number);
+        }
         $exec_string = self::$binary . ' ' . self::$atSwitches['remove'] . " $job_number";
         $output = self::exec($exec_string);
         if (count($output)) {
